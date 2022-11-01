@@ -14,6 +14,7 @@ export const wrapComposable = <
 ) =>
   mount(
     defineComponent({
+      ...extensions,
       template: extensions.template ?? '<div>{{ msg }}</div>',
       setup() {
         return {

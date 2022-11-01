@@ -37,7 +37,9 @@ export type ExtractComputedReturns<T extends any> = {
     : never
 }
 
-type ObjectInjectOptions = Record<
+export type ComponentInjectOptions = string[] | ObjectInjectOptions
+
+export type ObjectInjectOptions = Record<
   string | symbol,
   string | symbol | { from?: string | symbol; default?: unknown }
 >
@@ -58,10 +60,17 @@ export type Mixin<
   D = TData,
   M = MethodOptions,
   C = ComputedOptions,
+  Props = TData | string[],
+  Emits = string[],
   Context = D & M & ExtractComputedReturns<C>,
   MM = MethodOptions<Context>,
   CC = ContextualizedComputedOptions<Context>
 > = {
+  props?: Props
+  emits?: Emits
+
+  mixins?: Array<Record<string, any>>
+
   data?: (vm?: ComponentPublicInstance) => D
   methods?: MM
   computed?: CC
@@ -69,9 +78,9 @@ export type Mixin<
     string,
     WatchCallback | ({ handler: WatchCallback } & WatchOptions)
   >
+
   provide?: ComponentProvideOptions
   inject?: string[] | ObjectInjectOptions
-  mixins?: Array<Record<string, any>>
 
   beforeCreate?(): void
   created?(): void

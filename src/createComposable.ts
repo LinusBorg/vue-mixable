@@ -14,15 +14,16 @@ import {
   ref,
   computed,
   watch,
-  callWithAsyncErrorHandling,
-  type ComponentInternalInstance,
   type ComponentPublicInstance,
   type WatchCallback,
   type ToRefs,
   reactive,
+  provide,
 } from 'vue'
-import { isArray, isFunction, isObject } from './utils'
-import { cache } from './cache'
+import { callHook, isArray, isFunction, isObject } from './utils'
+import { createContextProxy } from './vmContextProxy'
+
+// import { cache } from './cache'
 
 import type {
   ComponentWatchOptionItem,
@@ -31,14 +32,20 @@ import type {
   MethodOptions,
   ComputedOptions,
 } from './types'
+import { resolveInjections } from './inject'
 
 export function createComposableFromMixin<
   TData extends Record<string, any>,
   TMethods extends MethodOptions,
-  TComputed extends ComputedOptions
->(mixin: Mixin<TData, TMethods, TComputed>) {
+  TComputed extends ComputedOptions,
+  Props extends Record<string, any> | string[],
+  Emits extends string[]
+>(mixin: Mixin<TData, TMethods, TComputed, Props, Emits>) {
   const {
-    mixins,
+    props,
+    emits,
+
+    // mixins,
 
     data: dataFn,
     computed: computedOptions,
@@ -46,8 +53,8 @@ export function createComposableFromMixin<
 
     watch,
 
-    provide,
-    inject,
+    provide: provideOptions,
+    inject: injectOptions,
 
     created,
     beforeCreate,
@@ -81,13 +88,28 @@ export function createComposableFromMixin<
 
     const context: Record<string, any> = {}
     const reactiveContext = reactive(context)
-    const vmContextProxy = createContextProxy(vm, reactiveContext)
+    const vmContextProxy = createContextProxy(
+      vm,
+      reactiveContext
+    ) as ComponentPublicInstance
 
     beforeCreate && callHook(beforeCreate, instance, 'bc')
 
+    // methods
+    if (methods) {
+      for (const key in methods) {
+        context[key] = methods[key].bind(vmContextProxy as any)
+      }
+    }
+
+    //inject
+    if (injectOptions) {
+      resolveInjections(injectOptions, context)
+    }
+
     // data
     if (dataFn) {
-      const data = dataFn.call(vm, vm)
+      const data = dataFn.call(vmContextProxy, vmContextProxy)
       for (const key in data) {
         context[key] = ref(data[key])
       }
@@ -99,19 +121,12 @@ export function createComposableFromMixin<
         const def = computedOptions[key]
         const c =
           typeof def === 'function'
-            ? computed(() => def.call(vm, vm))
+            ? computed(def.bind(vmContextProxy as any))
             : computed({
-                get: def.get.bind(vm),
-                set: def.set.bind(vm),
+                get: def.get.bind(vmContextProxy),
+                set: def.set.bind(vmContextProxy),
               })
         context[key] = c
-      }
-    }
-
-    // methods
-    if (methods) {
-      for (const key in methods) {
-        context[key] = methods[key].bind(vm)
       }
     }
 
@@ -120,13 +135,21 @@ export function createComposableFromMixin<
       for (const key in watch) {
         const def = watch[key]
         if (Array.isArray(def)) {
-          def.forEach((d) =>
-            createWatcher(d, vmContextProxy as ComponentPublicInstance, key)
-          )
+          def.forEach((d) => createWatcher(d, vmContextProxy, key))
         } else {
-          createWatcher(def, vmContextProxy as ComponentPublicInstance, key)
+          createWatcher(def, vmContextProxy, key)
         }
       }
+    }
+
+    // provide
+    if (provideOptions) {
+      const provides = isFunction(provideOptions)
+        ? provideOptions.call(vmContextProxy)
+        : provideOptions
+      Reflect.ownKeys(provides).forEach((key) => {
+        provide(key, provides[key])
+      })
     }
 
     // Lifecycle
@@ -148,22 +171,13 @@ export function createComposableFromMixin<
       ToRefs<ExtractComputedReturns<TComputed>>
   }
 
-  return composable
+  Object.assign(composable, {
+    props,
+    emits,
+  })
+  return composable as typeof composable & { props: Props; emits: Emits }
 }
 
-function callHook(
-  hook: Function,
-  instance: ComponentInternalInstance,
-  type: 'c' | 'bc'
-) {
-  callWithAsyncErrorHandling(
-    Array.isArray(hook)
-      ? hook.map((h) => h.bind(instance.proxy!))
-      : hook.bind(instance.proxy!),
-    instance,
-    type as any
-  )
-}
 function createWatcher(
   raw: ComponentWatchOptionItem,
   // ctx: Record<string, any>,
@@ -203,46 +217,4 @@ function createPathGetter(ctx: any, path: string) {
     }
     return cur
   }
-}
-
-function createContextProxy(
-  vm: ComponentPublicInstance,
-  context: Record<string, any>
-) {
-  return new Proxy(vm, {
-    get(vm, key, receiver) {
-      if (key in context) {
-        return Reflect.get(context, key, receiver)
-      } else {
-        return (vm as any)[key]
-      }
-    },
-    set(m, key, value, receiver) {
-      if (key in context) {
-        return Reflect.set(context, key, value, receiver)
-      } else {
-        return Reflect.set(vm, key, value)
-      }
-    },
-    has(vm, property) {
-      return Reflect.has(context, property) || Reflect.has(vm, property)
-    },
-    getOwnPropertyDescriptor(vm, property) {
-      if (property in context) {
-        return Reflect.getOwnPropertyDescriptor(context, property)
-      } else {
-        return Reflect.getOwnPropertyDescriptor(vm, property)
-      }
-    },
-    defineProperty(vm, property, descriptor) {
-      return Reflect.defineProperty(vm, property, descriptor)
-    },
-    deleteProperty(vm, property) {
-      if (property in context) {
-        return Reflect.deleteProperty(context, property)
-      } else {
-        return Reflect.deleteProperty(vm, property)
-      }
-    },
-  })
 }

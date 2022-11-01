@@ -1,1 +1,1 @@
-export { createComposableFromMixin } from "./createComposable";
+export { createComposableFromMixin } from './createComposable'

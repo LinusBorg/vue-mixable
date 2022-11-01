@@ -1,6 +1,26 @@
 {
   "name": "vue-comixable",
+  "description": "",
+  "keywords": ["Vue", "composables", "mixins", "Vue plugin", "migration"],
   "version": "0.0.0",
+  "author": {
+    "name": "Thorsten Lünborg",
+    "url": "https://github.com/linusborg"
+  },
+  "repository": {
+    "url": ""
+  },
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.cjs",
+      "import": "./dist/index.mjs",
+      "default": "./dist/index.cjs"
+    }
+  },
   "scripts": {
     "dev": "vite",
     "build": "run-p type-check build-only",

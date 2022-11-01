@@ -12,7 +12,6 @@ describe('watch option', async () => {
       }),
       watch: {
         msg(...args: any[]) {
-          console.log('watch msg', args)
           spy(...args)
         },
       },
