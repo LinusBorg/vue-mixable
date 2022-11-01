@@ -2,7 +2,7 @@
   "name": "vue-comixable",
   "description": "",
   "keywords": ["Vue", "composables", "mixins", "Vue plugin", "migration"],
-  "version": "0.0.0",
+  "version": "0.1.0",
   "author": {
     "name": "Thorsten Lünborg",
     "url": "https://github.com/linusborg"
@@ -23,11 +23,9 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "run-p type-check build-only",
-    "preview": "vite preview",
-    "test:unit": "vitest --environment jsdom --root src/",
-    "build-only": "vite build",
+    "build": "vite build && tsc --declaration --emitDeclarationOnly -p tsconfig.app.json --outDir dist",
     "type-check": "vue-tsc --noEmit -p tsconfig.vitest.json --composite false",
+    "test:unit": "vitest --environment jsdom --root src/",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore"
   },
   "dependencies": {

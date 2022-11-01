@@ -1,3 +1,10 @@
+/**
+ * @legal
+ * This code is largely based on code from the Vue 3 codebase:
+ * https://github.com/vuejs/core/blob/f67bb500b6071bc0e55a89709a495a27da73badd/packages/runtime-core/src/componentOptions.ts#L823-L876
+ * https://github.com/vuejs/core/blob/f67bb500b6071bc0e55a89709a495a27da73badd/packages/runtime-core/src/componentOptions.ts#L1073-L1084
+ */
+
 import { inject, isRef, type Ref } from 'vue'
 import type { ComponentInjectOptions, ObjectInjectOptions } from './types'
 import { isArray, isObject } from './utils'

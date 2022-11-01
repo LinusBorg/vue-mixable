@@ -1,3 +1,7 @@
+/**
+ * Code in this file is based on the Options API implementation in Vue 3's codebase:
+ * https://github.com/vuejs/core/blob/f67bb500b6071bc0e55a89709a495a27da73badd/packages/runtime-core/src/componentOptions.ts
+ */
 import {
   onBeforeMount,
   onMounted,
@@ -45,17 +49,15 @@ export function createComposableFromMixin<
     props,
     emits,
 
-    // mixins,
-
     data: dataFn,
     computed: computedOptions,
     methods,
-
     watch,
 
     provide: provideOptions,
     inject: injectOptions,
 
+    // Lifecylce Hooks
     created,
     beforeCreate,
     beforeMount,
@@ -69,6 +71,8 @@ export function createComposableFromMixin<
     renderTracked,
     renderTriggered,
     errorCaptured,
+
+    // mixins,
   } = mixin
 
   const composable = () => {

@@ -1,3 +1,9 @@
+/**
+ * @legal
+ * Various types in this file are based on code from the Vue 3 codebase:
+ * https://github.com/vuejs/core/blob/f67bb500b6071bc0e55a89709a495a27da73badd/packages/runtime-core/src/componentOptions.ts
+ */
+
 // TODO: replace with ComponentOptions or something
 import type {
   ComponentProvideOptions,
