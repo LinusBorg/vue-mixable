@@ -1,7 +1,13 @@
 {
   "name": "vue-comixable",
   "description": "",
-  "keywords": ["Vue", "composables", "mixins", "Vue plugin", "migration"],
+  "keywords": [
+    "Vue",
+    "composables",
+    "mixins",
+    "Vue plugin",
+    "migration"
+  ],
   "version": "0.1.0",
   "author": {
     "name": "Thorsten Lünborg",
