@@ -1,6 +1,6 @@
 import type { ComponentPublicInstance } from 'vue'
 
-export function createContextProxy(
+export /* #__PURE__ */ function createContextProxy(
   vm: ComponentPublicInstance,
   context: Record<string, any>
 ) {
