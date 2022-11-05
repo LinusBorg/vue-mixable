@@ -18,33 +18,88 @@ import {
   ref,
   computed,
   watch,
-  type ComponentPublicInstance,
-  type WatchCallback,
-  type ToRefs,
   reactive,
   provide,
+  type ComponentPublicInstance,
+  type WatchCallback,
 } from 'vue'
 import { callHook, isArray, isFunction, isObject } from './utils'
 import { createContextProxy } from './vmContextProxy'
+
+import type {
+  ComputedOptions,
+  MethodOptions,
+  ComponentOptionsWithObjectProps,
+  ComponentOptionsMixin,
+  ToRefs,
+  CreateComponentPublicInstance,
+  ExtractPropTypes,
+  ComponentPropsOptions,
+  ExtractDefaultPropTypes,
+  EmitsOptions,
+} from 'vue'
 
 // import { cache } from './cache'
 
 import type {
   ComponentWatchOptionItem,
-  Mixin,
   ExtractComputedReturns,
-  MethodOptions,
-  ComputedOptions,
+  EmitsToProps,
 } from './types'
 import { resolveInjections } from './inject'
 
-export function createComposableFromMixin<
-  TData extends Record<string, any>,
-  TMethods extends MethodOptions,
-  TComputed extends ComputedOptions,
-  Props extends Record<string, any> | string[],
-  Emits extends string[]
->(mixin: Mixin<TData, TMethods, TComputed, Props, Emits>) {
+export /* @__PURE__ */ function createComposableFromMixin<
+  Props extends Readonly<ExtractPropTypes<PropsOptions>> & EmitsToProps<E>,
+  VM extends CreateComponentPublicInstance<
+    Props,
+    RawBindings,
+    D,
+    C,
+    M,
+    Mixin,
+    Extends,
+    E,
+    Props,
+    ExtractDefaultPropTypes<PropsOptions>,
+    false
+  >,
+  PropsOptions extends Readonly<ComponentPropsOptions>,
+  RawBindings,
+  D,
+  C extends ComputedOptions = {},
+  M extends MethodOptions = {},
+  Mixin extends ComponentOptionsMixin = ComponentOptionsMixin,
+  Extends extends ComponentOptionsMixin = ComponentOptionsMixin,
+  E extends EmitsOptions = {},
+  EE extends string = string
+>(
+  mixin: ComponentOptionsWithObjectProps<
+    PropsOptions,
+    RawBindings,
+    D,
+    C,
+    M,
+    Mixin,
+    Extends,
+    E,
+    EE
+  >
+): () => ToRefs<D> & ToRefs<ExtractComputedReturns<C>> & M {
+  // type Props = Readonly<ExtractPropTypes<PropsOptions>> & EmitsToProps<E>
+  // type VM = CreateComponentPublicInstance<
+  //   Props,
+  //   RawBindings,
+  //   D,
+  //   C,
+  //   M,
+  //   Mixin,
+  //   Extends,
+  //   E,
+  //   Props,
+  //   ExtractDefaultPropTypes<PropsOptions>,
+  //   false
+  // >
+
   const {
     props,
     emits,
@@ -77,10 +132,7 @@ export function createComposableFromMixin<
 
   const composable = () => {
     const instance = getCurrentInstance()!
-    const vm = instance.proxy! as ComponentPublicInstance &
-      TData &
-      TMethods &
-      TComputed
+    const vm = instance.proxy! as VM
 
     // if (mixins) {
     //   mixins.forEach((mixin) => {
@@ -90,12 +142,9 @@ export function createComposableFromMixin<
     //   })
     // }
 
-    const context: Record<string, any> = {}
+    const context = {} as ToRefs<D> & ToRefs<ExtractComputedReturns<C>> & M
     const reactiveContext = reactive(context)
-    const vmContextProxy = createContextProxy(
-      vm,
-      reactiveContext
-    ) as ComponentPublicInstance
+    const vmContextProxy = createContextProxy(vm, reactiveContext) as VM
 
     beforeCreate && callHook(beforeCreate, instance, 'bc')
 
@@ -113,8 +162,11 @@ export function createComposableFromMixin<
 
     // data
     if (dataFn) {
-      const data = dataFn.call(vmContextProxy, vmContextProxy)
+      // FIXME - any has to go here
+      const data = dataFn.call(vmContextProxy as any, vmContextProxy as any)
       for (const key in data) {
+        // FIXME - TS `this`error
+        // @ts-expect-error this doesn't quite match yet
         context[key] = ref(data[key])
       }
     }
@@ -130,6 +182,8 @@ export function createComposableFromMixin<
                 get: def.get.bind(vmContextProxy),
                 set: def.set.bind(vmContextProxy),
               })
+        // FIXME - TS `this`error
+        // @ts-expect-error this doesn't quite match yet
         context[key] = c
       }
     }
@@ -170,16 +224,14 @@ export function createComposableFromMixin<
     renderTriggered && onRenderTriggered(renderTriggered.bind(vm))
     errorCaptured && onErrorCaptured(errorCaptured.bind(vm))
 
-    return context as ToRefs<TData> &
-      TMethods &
-      ToRefs<ExtractComputedReturns<TComputed>>
+    return context
   }
 
   Object.assign(composable, {
     props,
     emits,
   })
-  return composable as typeof composable & { props: Props; emits: Emits }
+  return composable as typeof composable & { props: Props; emits: E }
 }
 
 function createWatcher(
