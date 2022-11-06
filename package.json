@@ -1,6 +1,7 @@
 {
   "name": "vue-mixable",
-  "description": "",
+  "description": "Turn Vue Mixins into Composables with a simple helper function",
+  "version": "0.1.0",
   "keywords": [
     "Vue",
     "composables",
@@ -9,7 +10,6 @@
     "migration",
     "compat"
   ],
-  "version": "0.1.0",
   "author": {
     "name": "Thorsten Lünborg",
     "url": "https://github.com/linusborg"
