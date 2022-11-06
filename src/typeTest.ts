@@ -13,7 +13,13 @@ interface User {
 }
 
 const mixin = defineMixin({
-  props: {},
+  props: {
+    show: { type: Boolean },
+    msg: { type: String, required: true },
+  },
+  emits: {
+    'update:show': (value?: any) => true,
+  },
   data: () => ({
     msg: 'Hello World',
     age: 10,
@@ -44,6 +50,9 @@ const Comp = defineComponent({
     state.testFn()
   },
 })
+
+const props = testComposable.props
+const emits = testComposable.emits
 
 const CompWMixin = defineComponent({
   mixins: [mixin],
