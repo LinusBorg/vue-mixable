@@ -84,7 +84,10 @@ export /* @__PURE__ */ function createComposableFromMixin<
     E,
     EE
   >
-): () => ToRefs<D> & ToRefs<ExtractComputedReturns<C>> & M {
+): (() => ToRefs<D> & ToRefs<ExtractComputedReturns<C>> & M) & {
+  props: PropsOptions
+  emits: E
+} {
   // type Props = Readonly<ExtractPropTypes<PropsOptions>> & EmitsToProps<E>
   // type VM = CreateComponentPublicInstance<
   //   Props,
@@ -231,7 +234,7 @@ export /* @__PURE__ */ function createComposableFromMixin<
     props,
     emits,
   })
-  return composable as typeof composable & { props: Props; emits: E }
+  return composable as typeof composable & { props: PropsOptions; emits: E }
 }
 
 function createWatcher(
