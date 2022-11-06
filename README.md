@@ -1,6 +1,6 @@
-# `vue-comixable`
+# `vue-mixable`
 
-> Turn Mixins into composables to reuse them in Composition API
+> Convert mixins into composables to reuse them in Composition API
 
 ## Quick Intro
 
@@ -23,7 +23,7 @@ export const messageMixin  = {
 }
 
 // we can create a composable from it with a single function call
-import { createComposableFromMixin } from 'vue-comixable'
+import { createComposableFromMixin } from 'vue-mixable'
 export const useMessage = createComposableFromMixin(messageMixin)
 ```
 
@@ -45,7 +45,7 @@ This library is primarily useful for developers trying to migrate a Options-API 
 
 One of the challenges in such a migration is that one often cannot rewrite a mixin into a composable and replace all of that mixin's usage instances in the app at once, epsecially when mixins depend on one another, which is often the case in larger code-bases.
 
-This is where `vue-comixable` can help: The team can keep all their mixins for the time of the migration, but convert each of them into composables with one line of code. You get have your cake, and eat it to, in a way. 
+This is where `vue-mixable` can help: The team can keep all their mixins for the time of the migration, but convert each of them into composables with one line of code. You get have your cake, and eat it to, in a way. 
 
 Then they can migrate individual components from the mixin to the composable at their own pace, and once the migration is done, they can rewrite the mixin into a proper standalone composable and finally remove the mixin from your codebase.
 
@@ -53,14 +53,14 @@ Then they can migrate individual components from the mixin to the composable at 
 ## Installation
 
 ```bash
-npm install vue-comixable
+npm install vue-mixable
 ```
 
 ## Usage Notes
 
 ### Supported APIs
 
-`vue-comixable` provides full support for mixins that use the following Options APIs
+`vue-mixable` provides full support for mixins that use the following Options APIs
 
 * `data`
 * `computed`
@@ -84,7 +84,7 @@ If you use any of the above options, you would have to set them manually in any 
 
 Mixins can contain props definitions. Composables cannot, as they are functions invoked during component initialization (in `setup()`, at which point props must have been defined already.
 
-`vue-comixable` solves with in the following way:
+`vue-mixable` solves with in the following way:
 
 ```js
 const mixin = {
@@ -178,7 +178,62 @@ Possible workarounds:
 
 ## Typescript Support
 
-> Typescript support is still considered unstable as we plan on improving the types, possibly introduction breaking changes to the types.
+Typescript support is still considered unstable as we plan on improving the types, possibly introduction breaking changes to the types.
+
+**Caveats:** 
+
+* For Type inference to work, each mixin object *must* have a `props` key. If your mixin does not include any props, set it to an empty object.
+* props always need to be defined in object style. array style is currently not supported and will break type inference.
+* the `emits` option cannot be provided in its array form, it must take the more verbose object form.
+```ts
+const mixin = defineMixin({
+    props: {} // needed for proper tyep inference for now,
+    emits: {
+        'update:modelValue': (v?: any) => true, // this validator can be a NOOP returning `true`
+    },
+    data: () => ({
+        // ...
+    })
+})
+
+const composable = createCopmposableFromMixin(mixin)
+```
+
+### `defineMixin()`
+
+This function does not do anything at runtime, it's just providing tpe inferrence for your mixins:
+
+```ts
+const mixin = {
+    data: () => ({
+        msg: 'Hello World',
+    }),
+    methods: {
+        test() {
+            this.msg // not inferreed correctly
+        }
+    }
+}
+
+// better:
+import { defineMixin } from 'vue-mixable'
+const mixin = defineMixin({
+    props: {}, // needed, see caveat explained further up.
+    data: () => ({
+        msg: 'Hello World',
+    }),
+    methods: {
+        test() {
+            this.msg // properly inferred.
+        }
+    }
+}
+```
+
+### `createComposableFromMixin()`
+
+This function will offer full type inference for any mixin passed to it.
+
 
 ## Developer Instructions
 
