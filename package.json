@@ -33,8 +33,9 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build && tsc --declaration --emitDeclarationOnly -p tsconfig.app.json --outDir dist",
-    "type-check": "vue-tsc --noEmit -p tsconfig.vitest.json --composite false",
+    "type-check": "tsc --noEmit -p tsconfig.vitest.json --composite false",
     "test:unit": "vitest --environment jsdom --root src/",
+    "test:ci": "vitest --environment jsdom --root src/ --run",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore"
   },
   "dependencies": {
