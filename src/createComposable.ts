@@ -253,6 +253,11 @@ function createWatcher(
 
 function createPathGetter(ctx: any, path: string) {
   const segments = path.split('.')
-  return () =>
-    ctx ? segments.reduce((cur, item) => (cur = cur[item]), ctx) : ctx
+  return () => {
+    let cur = ctx
+    for (let i = 0; i < segments.length && cur; i++) {
+      cur = cur[segments[i]]
+    }
+    return cur
+  }
 }

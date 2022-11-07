@@ -68,10 +68,11 @@ export function resolveInjections(
 function normalizeInject(
   raw: ComponentInjectOptions | undefined
 ): ObjectInjectOptions | undefined {
-  return isArray(raw)
-    ? raw.reduce((res, item) => {
-        res[item] = item
-        return res
-      }, {} as ObjectInjectOptions)
-    : raw
+  if (!isArray(raw)) return raw
+
+  const res: ObjectInjectOptions = {}
+  for (let i = 0; i < raw.length; i++) {
+    res[raw[i]] = raw[i]
+  }
+  return res
 }
