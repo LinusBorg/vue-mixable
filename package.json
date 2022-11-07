@@ -47,6 +47,7 @@
     "test:ci": "vitest --environment jsdom --root src/ --run",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix"
   },
+  "packageManager": "pnpm@7.14.1",
   "size-limit": [
     {
       "path": "dist/index.cjs",
@@ -84,5 +85,4 @@
       "optional": true
     }
   }
-
 }
