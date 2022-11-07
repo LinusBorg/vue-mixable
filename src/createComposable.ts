@@ -23,7 +23,7 @@ import {
   type ComponentPublicInstance,
   type WatchCallback,
 } from 'vue'
-import { callHook, isArray, isFunction, isObject } from './utils'
+import { callHook, isArray, isFunction, isObject, isString } from './utils'
 import { createContextProxy } from './vmContextProxy'
 
 import type {
@@ -163,13 +163,12 @@ export /* @__PURE__ */ function createComposableFromMixin<
     if (computedOptions) {
       for (const key in computedOptions) {
         const def = computedOptions[key]
-        const c =
-          typeof def === 'function'
-            ? computed(def.bind(vmContextProxy as any))
-            : computed({
-                get: def.get.bind(vmContextProxy),
-                set: def.set.bind(vmContextProxy),
-              })
+        const c = isFunction(def)
+          ? computed(def.bind(vmContextProxy as any))
+          : computed({
+              get: def.get.bind(vmContextProxy),
+              set: def.set.bind(vmContextProxy),
+            })
         // FIXME - TS `this`error
         // @ts-expect-error this doesn't quite match yet
         context[key] = c
@@ -180,7 +179,7 @@ export /* @__PURE__ */ function createComposableFromMixin<
     if (watch) {
       for (const key in watch) {
         const def = watch[key]
-        if (Array.isArray(def)) {
+        if (isArray(def)) {
           def.forEach((d) => createWatcher(d, vmContextProxy, key))
         } else {
           createWatcher(def, vmContextProxy, key)
@@ -231,12 +230,12 @@ function createWatcher(
   const getter = key.includes('.')
     ? createPathGetter(publicThis, key)
     : () => (publicThis as any)[key]
-  if (typeof raw === 'string') {
+  if (isString(raw)) {
     const handler = publicThis[raw]
     if (isFunction(handler)) {
       watch(getter, handler as WatchCallback)
     }
-  } else if (typeof raw === 'function') {
+  } else if (isFunction(raw)) {
     watch(getter, raw.bind(publicThis))
   } else if (isObject(raw)) {
     if (isArray(raw)) {
@@ -254,11 +253,6 @@ function createWatcher(
 
 function createPathGetter(ctx: any, path: string) {
   const segments = path.split('.')
-  return () => {
-    let cur = ctx
-    for (let i = 0; i < segments.length && cur; i++) {
-      cur = cur[segments[i]]
-    }
-    return cur
-  }
+  return () =>
+    ctx ? segments.reduce((cur, item) => (cur = cur[item]), ctx) : ctx
 }
