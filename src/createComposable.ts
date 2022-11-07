@@ -88,21 +88,6 @@ export /* @__PURE__ */ function createComposableFromMixin<
   props: PropsOptions
   emits: E
 } {
-  // type Props = Readonly<ExtractPropTypes<PropsOptions>> & EmitsToProps<E>
-  // type VM = CreateComponentPublicInstance<
-  //   Props,
-  //   RawBindings,
-  //   D,
-  //   C,
-  //   M,
-  //   Mixin,
-  //   Extends,
-  //   E,
-  //   Props,
-  //   ExtractDefaultPropTypes<PropsOptions>,
-  //   false
-  // >
-
   const {
     props,
     emits,

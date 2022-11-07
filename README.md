@@ -1,6 +1,11 @@
-# `vue-mixable`
+# 🌪 `vue-mixable`
 
 > Convert mixins into composables to reuse them in Composition API
+
+* helpful during Options API -> Composition API migrations / in mixed code-bases
+* simple API - one function call is all you need
+* TS Support (with small caveats)
+* small footprint
 
 ## Quick Intro
 
@@ -39,7 +44,7 @@ const {
 </script>
 ```
 
-## Usecase
+## Use cases
 
 This library is primarily useful for developers trying to migrate a Options-API codebase using Mixins for code sharing to Composition API using composables for code sharing.
 
@@ -156,10 +161,9 @@ const {
 
 ### Feature Roadmap
 
-- [ ] Nested Mixins
-- [x] Mixins that implicitly depend on APIs from other mixins
-- [x] Exclude specific properties from composables return value (essentially making some mixin properties private in the composable)
-- [ ] 
+- [ ] Support Mixins that implicitly depend on properties/APIs from other mixins.
+- [ ] Support Nested Mixins.
+- [ ] Exclude specific properties from composables return value (essentially making some mixin properties private in the composable).
 
 Out of scope / not planned
 
