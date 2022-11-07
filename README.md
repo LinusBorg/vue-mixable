@@ -1,3 +1,5 @@
+![current npm version](https://img.shields.io/npm/v/vue-mixable) ![NPM](https://img.shields.io/npm/l/vue-mixable) ![npm bundle size (min+zip)](https://img.shields.io/bundlephobia/minzip/vue-mixable) ![npm downloads per month](https://img.shields.io/npm/dm/vue-mixable)
+
 # 🌪 `vue-mixable`
 
 > Convert mixins into composables to reuse them in Composition API
@@ -5,7 +7,7 @@
 * helpful during Options API -> Composition API migrations / in mixed code-bases
 * simple API - one function call is all you need
 * TS Support (with small caveats)
-* small footprint
+* small footprint: [npm bundle size (min+zip)](https://img.shields.io/bundlephobia/minzip/vue-mixable)
 
 ## Quick Intro
 
@@ -167,7 +169,7 @@ const {
 
 Out of scope / not planned
 
-- [ ] mixins with circular dependencies on one another.
+- [ ] mixins with implicit circular dependencies on one another.
 
 ## Caveats
 
