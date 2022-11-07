@@ -59,7 +59,6 @@
     "@size-limit/preset-small-lib": "^8.1.0",
     "@types/jsdom": "^20.0.0",
     "@types/node": "^16.11.68",
-    "@vitejs/plugin-vue": "^3.1.2",
     "@vue/eslint-config-prettier": "^7.0.0",
     "@vue/eslint-config-typescript": "^11.0.0",
     "@vue/test-utils": "^2.1.0",
