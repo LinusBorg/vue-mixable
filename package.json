@@ -1,7 +1,7 @@
 {
   "name": "vue-mixable",
   "description": "Turn Vue Mixins into Composables with a simple helper function",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "keywords": [
     "Vue",
     "composables",
@@ -28,8 +28,12 @@
       "require": "./dist/index.cjs",
       "import": "./dist/index.mjs",
       "default": "./dist/index.cjs"
-    }
+    },
+    "./package.json": "./package.json"
   },
+  "files": [
+    "dist", "README.md", "LICENSE", "src"
+  ],
   "scripts": {
     "dev": "vite",
     "build": "vite build && tsc --declaration --emitDeclarationOnly -p tsconfig.app.json --outDir dist",
