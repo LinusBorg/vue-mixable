@@ -8,7 +8,7 @@ export const wrapComposable = <
   T extends TCreateComposable,
   O extends MountingOptions<{}>
 >(
-  composable: T,
+  composable: any,
   options: O = {} as O,
   extensions: Record<string, any> = {}
 ) =>

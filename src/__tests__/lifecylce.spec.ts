@@ -1,5 +1,6 @@
 import { describe, test, expect, vi } from 'vitest'
 import { createComposableFromMixin } from '../createComposable'
+import { defineMixin } from '../defineMixin'
 import { wrapComposable } from './helpers'
 
 describe('Lifecycle hooks', async () => {
@@ -9,7 +10,8 @@ describe('Lifecycle hooks', async () => {
       // @ts-expect-error - doesn't like this for some reason
       if ((this as any).$emit) spy()
     }
-    const mixin = {
+    const mixin = defineMixin({
+      props: {},
       data: () => ({
         msg: 'A',
       }),
@@ -21,7 +23,7 @@ describe('Lifecycle hooks', async () => {
       updated: testHandler,
       beforeUnmount: testHandler,
       unmounted: testHandler,
-    }
+    })
 
     const composable = createComposableFromMixin(mixin)
     const wrapper = wrapComposable(

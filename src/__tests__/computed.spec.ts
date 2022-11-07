@@ -1,17 +1,19 @@
 import { describe, test, expect } from 'vitest'
 import type { ComponentPublicInstance } from 'vue'
 import { createComposableFromMixin } from '../createComposable'
+import { defineMixin } from '../defineMixin'
 import { wrapComposable } from './helpers'
 
 describe('computed option', async () => {
   test('computed are readable', async () => {
-    const mixin = {
+    const mixin = defineMixin({
+      props: {},
       computed: {
         msg() {
           return 'msg'
         },
       },
-    } as const
+    } as const)
 
     const composable = createComposableFromMixin(mixin)
     const wrapper = wrapComposable(composable)
@@ -20,21 +22,22 @@ describe('computed option', async () => {
   })
 
   test('writeable computeds work', async () => {
-    const mixin = {
+    const mixin = defineMixin({
+      props: {},
       data: () => ({
         internalMsg: 'A',
       }),
       computed: {
         msg: {
-          get() {
-            return (this as any).internalMsg
+          get(): string {
+            return this.internalMsg
           },
           set(v: string) {
-            ;(this as any).internalMsg = v
+            this.internalMsg = v
           },
         },
       },
-    } as const
+    } as const)
 
     const composable = createComposableFromMixin(mixin)
     const wrapper = wrapComposable(
@@ -51,13 +54,14 @@ describe('computed option', async () => {
   })
 
   test('computed have access to `this`', async () => {
-    const mixin = {
+    const mixin = defineMixin({
+      props: {},
       computed: {
         msg() {
-          return !!(this as unknown as ComponentPublicInstance).$emit
+          return !!this.$emit
         },
       },
-    } as const
+    } as const)
 
     const composable = createComposableFromMixin(mixin)
     const wrapper = wrapComposable(composable)
@@ -66,16 +70,17 @@ describe('computed option', async () => {
   })
 
   test('computed have access to data from mixin', async () => {
-    const mixin = {
+    const mixin = defineMixin({
+      props: {},
       data: () => ({
         foo: 'Hello World',
       }),
       computed: {
-        msg() {
-          return (this as any).foo
+        msg(): string {
+          return this.foo
         },
       },
-    } as const
+    } as const)
 
     const composable = createComposableFromMixin(mixin)
     const wrapper = wrapComposable(composable)

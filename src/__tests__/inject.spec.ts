@@ -1,11 +1,13 @@
 import { describe, test, expect } from 'vitest'
 import { defineComponent, ref } from 'vue'
 import { createComposableFromMixin } from '../createComposable'
+import { defineMixin } from '../defineMixin'
 import { wrapComposable } from './helpers'
 
 describe('inject option', async () => {
   test('injects from mixin work', async () => {
-    const mixin = {
+    const mixin = defineMixin({
+      props: {},
       inject: {
         foo: {
           from: 'foo',
@@ -17,7 +19,7 @@ describe('inject option', async () => {
           msg: (this as any).foo,
         }
       },
-    }
+    })
 
     const composable = createComposableFromMixin(mixin)
     const wrapper = wrapComposable(
@@ -33,11 +35,12 @@ describe('inject option', async () => {
 
   test('provide works', async () => {
     const foo = ref('foo')
-    const mixin = {
+    const mixin = defineMixin({
+      props: {},
       provide: {
         foo,
       },
-    }
+    })
     const Child = defineComponent({
       inject: ['foo'],
       template: `<div @click="foo = 'bar'">{{ foo }}</div>`,

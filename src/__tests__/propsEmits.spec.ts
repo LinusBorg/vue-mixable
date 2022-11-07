@@ -2,15 +2,16 @@ import { describe, test, expect, vi } from 'vitest'
 import { defineComponent } from 'vue'
 import { mount } from '@vue/test-utils'
 import { createComposableFromMixin } from '../createComposable'
+import { defineMixin } from '../defineMixin'
 // import { wrapComposable } from './helpers'
 
 describe('props', () => {
   test('props as property on composable', async () => {
-    const mixin = {
+    const mixin = defineMixin({
       props: {
         foo: String,
       },
-    }
+    })
 
     const composable = createComposableFromMixin(mixin)
     const Comp = defineComponent({
@@ -30,9 +31,10 @@ describe('props', () => {
 
 describe('emits', () => {
   test('emits option on composable', async () => {
-    const mixin = {
+    const mixin = defineMixin({
+      props: {},
       emits: ['foo'],
-    }
+    })
 
     const composable = createComposableFromMixin(mixin)
     const Comp = defineComponent({
