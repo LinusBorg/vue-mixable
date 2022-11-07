@@ -39,6 +39,7 @@
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore"
   },
   "dependencies": {
+    "type-fest": "^3.2.0",
     "vue": "^3.2.41"
   },
   "devDependencies": {
