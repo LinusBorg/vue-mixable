@@ -1,7 +1,7 @@
 {
   "name": "vue-mixable",
   "description": "Turn Vue Mixins into Composables with a simple helper function",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "keywords": [
     "Vue",
     "composables",
