@@ -1,7 +1,8 @@
 {
   "name": "vue-mixable",
   "description": "Turn Vue Mixins into Composables with a simple helper function",
-  "version": "0.2.1",
+  "version": "0.2.2",
+  "license": "MIT",
   "keywords": [
     "Vue",
     "composables",
@@ -15,7 +16,8 @@
     "url": "https://github.com/linusborg"
   },
   "repository": {
-    "url": ""
+    "url": "https://github.com/LinusBorg/vue-mixable",
+    "type": "git"
   },
   "main": "./dist/index.cjs",
   "module": "./dist/index.mjs",
