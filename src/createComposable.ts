@@ -48,6 +48,8 @@ import type {
 } from './types'
 import { resolveInjections } from './inject'
 
+export const cache = new Map<any, any>() // TODO: properly type this
+
 export /* @__PURE__ */ function createComposableFromMixin<
   Props extends Readonly<ExtractPropTypes<PropsOptions>> & EmitsToProps<E>,
   VM extends CreateComponentPublicInstance<
@@ -117,6 +119,10 @@ export /* @__PURE__ */ function createComposableFromMixin<
 
     // mixins,
   } = mixin
+
+  if (cache.has(mixin)) {
+    return cache.get(mixin) as any
+  }
 
   const composable = () => {
     const instance = getCurrentInstance()!
@@ -219,6 +225,8 @@ export /* @__PURE__ */ function createComposableFromMixin<
     props,
     emits,
   })
+
+  cache.set(mixin, composable)
   return composable as typeof composable & { props: PropsOptions; emits: E }
 }
 
