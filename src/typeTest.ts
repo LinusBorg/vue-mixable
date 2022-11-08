@@ -18,7 +18,7 @@ const mixin = defineMixin({
     msg: { type: String, required: true },
   },
   emits: {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    // eslint-disable-next-line no-autofix/unused-imports/no-unused-vars
     'update:show': (value?: any) => true,
   },
   data: () => ({
@@ -40,7 +40,7 @@ const mixin = defineMixin({
 
 const testComposable = createComposableFromMixin(mixin)
 
-/* eslint-disable @typescript-eslint/no-unused-vars  */
+/* eslint-disable no-autofix/unused-imports/no-unused-vars */
 const Comp = defineComponent({
   setup() {
     const state = testComposable()
