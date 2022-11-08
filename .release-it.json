@@ -10,5 +10,10 @@
       "preset": "angular",
       "infile": "CHANGELOG.md"
     }
+  },
+  "hooks": {
+    "before:init": ["pnpm lint:ci", "pnpm test:unit"],
+    "after:bump": ["pnpm build"],
+    "after:release": ["echo 🥳 Successfully released ${name} v${version}."]
   }
 }
