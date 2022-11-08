@@ -1,4 +1,6 @@
-![current npm version](https://img.shields.io/npm/v/vue-mixable) ![NPM](https://img.shields.io/npm/l/vue-mixable) ![npm bundle size (min+zip)](https://img.shields.io/bundlephobia/minzip/vue-mixable) ![npm downloads per month](https://img.shields.io/npm/dm/vue-mixable)
+![current npm version](https://img.shields.io/npm/v/vue-mixable) ![npm bundle size (min+gzip)](https://badgen.net/bundlephobia/minzip/vue-mixable) ![npm downloads per month](https://img.shields.io/npm/dm/vue-mixable)
+
+![NPM](https://img.shields.io/npm/l/vue-mixable) ![CI checks](https://badgen.net/github/checks/linusborg/vue-mixable) ![types included](https://badgen.net/npm/types/vue-mixable)
 
 # 🌪 `vue-mixable`
 
@@ -7,7 +9,7 @@
 * helpful during Options API -> Composition API migrations / in mixed code-bases
 * simple API - one function call is all you need
 * TS Support (with small caveats)
-* small footprint: [npm bundle size (min+zip)](https://img.shields.io/bundlephobia/minzip/vue-mixable)
+* small footprint: ![npm bundle size (min+zip)](https://badgen.net/bundlephobia/minzip/vue-mixable)
 
 ## Quick Intro
 
