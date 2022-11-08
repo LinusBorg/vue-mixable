@@ -42,7 +42,7 @@ const {
     msg, // ref
     loudMsg, // computed() ref
     capitalize // function
-} = useLoudMessage()
+} = useMessage()
 </script>
 ```
 
