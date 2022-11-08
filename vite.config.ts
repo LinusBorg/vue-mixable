@@ -37,6 +37,6 @@ export default defineConfig({
     },
   },
   test: {
-    setupFiles: ['./__tests__/setup.ts'],
+    setupFiles: ['./qsrc/__tests__/setup.ts'],
   },
 })
