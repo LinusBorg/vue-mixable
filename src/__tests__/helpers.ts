@@ -1,14 +1,8 @@
 import { mount, type MountingOptions } from '@vue/test-utils'
 import { defineComponent } from 'vue'
-import type { createComposableFromMixin } from '../createComposable'
 
-type TCreateComposable = ReturnType<typeof createComposableFromMixin>
-
-export const wrapComposable = <
-  T extends TCreateComposable,
-  O extends MountingOptions<{}>
->(
-  composable: T,
+export const wrapComposable = <O extends MountingOptions<{}>>(
+  composable: any,
   options: O = {} as O,
   extensions: Record<string, any> = {}
 ) =>

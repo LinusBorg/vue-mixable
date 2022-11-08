@@ -5,6 +5,7 @@ export const isFunction = (val: unknown): val is Function =>
 export const isArray = Array.isArray
 export const isObject = (val: unknown): val is Record<any, any> =>
   val !== null && typeof val === 'object'
+export const isString = (val: unknown): val is string => typeof val === 'string'
 
 /**
  * @legal
@@ -17,7 +18,7 @@ export function callHook(
   type: 'c' | 'bc'
 ) {
   callWithAsyncErrorHandling(
-    Array.isArray(hook)
+    isArray(hook)
       ? hook.map((h) => h.bind(instance.proxy!))
       : hook.bind(instance.proxy!),
     instance,

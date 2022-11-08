@@ -32,37 +32,3 @@ export /** #__PURE__*/ function defineMixin<
 ): typeof options {
   return options
 }
-
-// Test
-
-const composable = defineMixin({
-  props: {},
-  data() {
-    return {
-      count: 0,
-    }
-  },
-  watch: {
-    count(count) {
-      console.log('count', count, this.count)
-    },
-  },
-  created() {
-    this.count
-  },
-  computed: {
-    doubleCount(): number {
-      return this.count * 2
-    },
-  },
-  methods: {
-    logCounts() {
-      console.log(this.count, this.doubleCount)
-      return true
-    },
-  },
-})
-
-composable.count.value
-composable.doubleCount.value
-composable.logCounts()

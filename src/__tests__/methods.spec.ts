@@ -1,17 +1,19 @@
 import { describe, test, expect } from 'vitest'
 import type { ComponentPublicInstance } from 'vue'
 import { createComposableFromMixin } from '../createComposable'
+import { defineMixin } from '../defineMixin'
 import { wrapComposable } from './helpers'
 
 describe('methods option', () => {
   test('methods are callable', async () => {
-    const mixin = {
+    const mixin = defineMixin({
+      props: {},
       methods: {
         msg() {
           return 'msg'
         },
       },
-    } as const
+    })
 
     const composable = createComposableFromMixin(mixin)
     const wrapper = wrapComposable(composable)
@@ -20,13 +22,14 @@ describe('methods option', () => {
   })
 
   test('methods have access to `this`', async () => {
-    const mixin = {
+    const mixin = defineMixin({
+      props: {},
       methods: {
         msg() {
           return !!(this as unknown as ComponentPublicInstance).$emit
         },
       },
-    } as const
+    })
 
     const composable = createComposableFromMixin(mixin)
     const wrapper = wrapComposable(composable)
@@ -35,7 +38,8 @@ describe('methods option', () => {
   })
 
   test('methods have access to data from mixin', async () => {
-    const mixin = {
+    const mixin = defineMixin({
+      props: {},
       data: () => ({
         msg: 'Hello World',
       }),
@@ -44,7 +48,7 @@ describe('methods option', () => {
           return (this as any).msg
         },
       },
-    } as const
+    })
 
     const composable = createComposableFromMixin(mixin)
     const wrapper = wrapComposable(composable)

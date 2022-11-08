@@ -1,12 +1,14 @@
 import { describe, test, expect, vi } from 'vitest'
 import { nextTick } from 'vue'
 import { createComposableFromMixin } from '../createComposable'
+import { defineMixin } from '../defineMixin'
 import { wrapComposable } from './helpers'
 
 describe('watch option', async () => {
   test('string watch', async () => {
     const spy = vi.fn()
-    const mixin = {
+    const mixin = defineMixin({
+      props: {},
       data: () => ({
         msg: 'A',
       }),
@@ -15,7 +17,7 @@ describe('watch option', async () => {
           spy(...args)
         },
       },
-    }
+    })
 
     const composable = createComposableFromMixin(mixin)
     const wrapper = wrapComposable(
