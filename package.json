@@ -49,8 +49,7 @@
     "lint": "pnpm lint:ci --fix",
     "size": "pnpm size-limit",
     "release": "release-it",
-    "update-hooks": "pnpm simple-git-hooks",
-    "postinstall": "pnpm update-hooks"
+    "update-hooks": "pnpm simple-git-hooks"
   },
   "packageManager": "pnpm@7.14.1",
   "simple-git-hooks": {
