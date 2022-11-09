@@ -20,8 +20,6 @@ import {
   watch,
   reactive,
   provide,
-  type ComponentPublicInstance,
-  type WatchCallback,
 } from 'vue'
 import { callHook, isArray, isFunction, isObject, isString } from './utils'
 import { createContextProxy } from './vmContextProxy'
@@ -37,6 +35,8 @@ import type {
   ComponentPropsOptions,
   ExtractDefaultPropTypes,
   EmitsOptions,
+  ComponentPublicInstance,
+  WatchCallback,
 } from 'vue'
 
 // import { cache } from './cache'
