@@ -12,7 +12,7 @@
     }
   },
   "hooks": {
-    "before:init": ["pnpm lint:ci", "pnpm test:unit"],
+    "before:init": ["pnpm lint:ci", "pnpm test:ci"],
     "after:bump": ["pnpm build"],
     "after:release": ["echo 🥳 Successfully released ${name} v${version}."]
   }
