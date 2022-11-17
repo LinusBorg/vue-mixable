@@ -1,10 +1,10 @@
 import type { ComponentPublicInstance } from 'vue'
 
 export /* #__PURE__ */ function createContextProxy(
-  vm: ComponentPublicInstance,
+  _vm: ComponentPublicInstance,
   context: Record<string, any>
 ) {
-  return new Proxy(vm, {
+  return new Proxy(_vm, {
     get(vm, key, receiver) {
       if (key in context) {
         return Reflect.get(context, key, receiver)
@@ -12,7 +12,7 @@ export /* #__PURE__ */ function createContextProxy(
         return (vm as any)[key]
       }
     },
-    set(m, key, value, receiver) {
+    set(vm, key, value, receiver) {
       if (key in context) {
         return Reflect.set(context, key, value, receiver)
       } else {

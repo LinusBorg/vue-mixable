@@ -140,7 +140,7 @@ export /* @__PURE__ */ function createComposableFromMixin<
     const reactiveContext = reactive(context)
     const vmContextProxy = createContextProxy(vm, reactiveContext) as VM
 
-    beforeCreate && callHook(beforeCreate, instance, 'bc')
+    beforeCreate && callHook(beforeCreate, instance, vm, 'bc')
 
     // methods
     if (methods) {
@@ -204,7 +204,7 @@ export /* @__PURE__ */ function createComposableFromMixin<
     }
 
     // Lifecycle
-    created && callHook(created, instance, 'c')
+    created && callHook(created, instance, vm, 'c')
     beforeMount && onBeforeMount(beforeMount.bind(vm))
     mounted && onMounted(mounted.bind(vm))
     beforeUpdate && onBeforeUpdate(beforeUpdate.bind(vm))

@@ -4,7 +4,7 @@ import { defineMixin } from '../defineMixin'
 import { wrapComposable } from './helpers'
 
 describe('Lifecycle hooks', async () => {
-  test('normal lifecycle hooks are called with proper `this`', async () => {
+  test('are called with proper `this`', async () => {
     const spy = vi.fn()
     function testHandler() {
       // @ts-expect-error - doesn't like this for some reason
@@ -43,5 +43,29 @@ describe('Lifecycle hooks', async () => {
     await wrapper.unmount()
 
     expect(spy).toHaveBeenCalledTimes(8)
+  })
+
+  test('can read and set custom properties on `this`', async () => {
+    const mixin = defineMixin({
+      props: {},
+      beforeCreate() {
+        ;(this as any).custom = 'A'
+      },
+      created() {
+        expect((this as any).custom).toBe('A')
+      },
+    })
+
+    const composable = createComposableFromMixin(mixin)
+
+    const wrapper = wrapComposable(
+      composable,
+      {},
+      {
+        template: `<div/>`,
+      }
+    )
+
+    expect((wrapper.vm as any).custom).toBe('A')
   })
 })

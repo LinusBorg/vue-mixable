@@ -1,4 +1,8 @@
-import { callWithAsyncErrorHandling, type ComponentInternalInstance } from 'vue'
+import {
+  callWithAsyncErrorHandling,
+  type ComponentInternalInstance,
+  type ComponentPublicInstance,
+} from 'vue'
 
 export const isFunction = (val: unknown): val is Function =>
   typeof val === 'function'
@@ -15,12 +19,11 @@ export const isString = (val: unknown): val is string => typeof val === 'string'
 export function callHook(
   hook: Function,
   instance: ComponentInternalInstance,
+  vm: ComponentPublicInstance,
   type: 'c' | 'bc'
 ) {
   callWithAsyncErrorHandling(
-    isArray(hook)
-      ? hook.map((h) => h.bind(instance.proxy!))
-      : hook.bind(instance.proxy!),
+    isArray(hook) ? hook.map((h) => h.bind(vm)) : hook.bind(vm),
     instance,
     type as any
   )
