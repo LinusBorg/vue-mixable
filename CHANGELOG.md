@@ -1,5 +1,12 @@
 
 
+## [0.3.1](https://github.com/LinusBorg/vue-mixable/compare/0.3.0...0.3.1) (2022-11-17)
+
+
+### Bug Fixes
+
+* **vm:** ensure custom properties can be set and read ([784882f](https://github.com/LinusBorg/vue-mixable/commit/784882febd52ee3c3e07d0ab1b19285c44609b22))
+
 # 0.3.0 (2022-11-07)
 
 
