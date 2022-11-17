@@ -41,6 +41,7 @@ describe.skip('advanced', () => {
         outerSpy()
       },
     })
+    // eslint-disable-next-line no-autofix/unused-imports/no-unused-vars
     const innerComposable = createComposableFromMixin(innerMixin)
 
     const outerComposable = createComposableFromMixin(outerMixin)
