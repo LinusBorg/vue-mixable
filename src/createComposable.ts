@@ -20,8 +20,6 @@ import {
   watch,
   reactive,
   provide,
-  type ComponentPublicInstance,
-  type WatchCallback,
 } from 'vue'
 import { callHook, isArray, isFunction, isObject, isString } from './utils'
 import { createContextProxy } from './vmContextProxy'
@@ -37,6 +35,8 @@ import type {
   ComponentPropsOptions,
   ExtractDefaultPropTypes,
   EmitsOptions,
+  ComponentPublicInstance,
+  WatchCallback,
 } from 'vue'
 
 // import { cache } from './cache'
@@ -159,9 +159,7 @@ export /* @__PURE__ */ function createComposableFromMixin<
       // FIXME - any has to go here
       const data = dataFn.call(vmContextProxy as any, vmContextProxy as any)
       for (const key in data) {
-        // FIXME - TS `this`error
-        // @ts-expect-error this doesn't quite match yet
-        context[key] = ref(data[key])
+        context[key] = ref<any>(data[key])
       }
     }
 
