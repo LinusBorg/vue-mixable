@@ -45,7 +45,7 @@
     "type-check": "tsc --noEmit -p tsconfig.vitest.json --composite false",
     "test:unit": "vitest --environment jsdom",
     "test:ci": "vitest --environment jsdom --run",
-    "lint:ci": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts",
+    "lint:ci": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --cache",
     "lint": "pnpm lint:ci --fix",
     "size": "pnpm size-limit",
     "release": "release-it",
